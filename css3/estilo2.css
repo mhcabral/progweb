@@ -1,0 +1,23 @@
+body{
+	background-image: url(grecia.jpg);
+	background-repeat: no-repeat;
+	background-color: lightblue;
+	background-position: 100px 0px;
+}
+
+h1{
+	font-style: bold;
+}
+
+.box{
+	border: 10px solid #996633;
+	border-radius: 20px;
+	background-color: rgba(255,255,255,0.8);
+	max-height: 500px;
+	max-width: 400px;
+	padding: 5px 5px 5px 5px;
+	text-align: center;
+	margin: 50px 90px;
+	box-shadow: 2px 2px 2px 2px black,
+				2px 2px 2px 2px black inset;
+}

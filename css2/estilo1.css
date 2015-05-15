@@ -1,0 +1,9 @@
+.paragrafo{
+	border: 10px solid black;
+	padding: 8px 8px 8px 8px;
+	background-color: lightgray;
+	border-top-right-radius: 30px;
+	border-bottom-left-radius: 30px;
+	max-height: 500px;
+	max-width: 400px;
+}
