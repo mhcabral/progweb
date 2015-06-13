@@ -1,0 +1,103 @@
+<html>
+<head>
+	<title>Apenas um teste</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		div {
+			margin-top: 15px;
+		}
+
+		input {
+			margin-top: 15px;
+		}
+
+		textarea{
+			width: 500px;
+			height: 80px;
+		}
+
+		img{
+			width: 180px;
+			height: 120px;
+		}
+		.table_coment{
+			background-color: gray;
+			font-weight: bold;
+			color:white;
+			text-align: center;
+			padding: 3px 3px 3px 3px;
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<img src="theodore.jpg"/>
+			</td>
+			<td>
+				<h2>Theodore Roosevelt</h2>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><div>Acredite que você pode, assim você já está no meio do caminho.</div></td>
+		</tr>
+		<tr>
+			<td><div id="like">0 pessoas gostaram disso</div></td>
+			<td> 
+				<form name = "form">
+                	<input type = "button" name = "blike" value= "Like" id="buttonLike"/>
+            	</form>
+        	</td>
+		</tr>
+	<table>
+		<tr>
+			<td colspan="2">
+        		<textarea name="tarea" id="tarea"></textarea>
+    		</td>
+    		<td>
+        		<form name ="coment">
+            		<input type ="button" name="bcomentario" value="Comentar" id="buttonComent"/>
+        		</form>
+    		</td>
+		</tr>
+	</table>
+	</table>
+	<table id="table_coment" class="table_coment" border="1px">
+		<thead>
+			<td colspan="2">Comentários</td>
+		</thead>
+	</table>
+	<script type="text/javascript">
+	 	var CONTADOR = 1;
+	 	var CONTADOR2 = 1;
+	 	document.getElementById("buttonLike").onclick = function() {
+	 		
+            document.getElementById("like").innerHTML = CONTADOR + " pessoas gostaram disso";
+            CONTADOR = CONTADOR +1;
+      	}
+      	var tableComent = document.getElementById("table_coment");
+      	document.getElementById("buttonComent").onclick = function() {
+      		var comentario = document.getElementById("tarea");
+      			if(comentario.value!=""){
+      			//console.log("Funcão botão funcionando");
+      			var row = tableComent.appendChild(document.createElement("tr"));
+      			//console.log("Variaveis criadas");
+      			var son = row.appendChild(document.createElement("td"));
+      			son.setAttribute("id",CONTADOR2);
+      			document.getElementById(CONTADOR2).innerHTML = comentario.value;
+      			//console.log(CONTADOR2);
+      			CONTADOR2 = CONTADOR2 + 1;
+      			comentario.value="";
+      		}
+      		
+      	};
+
+
+
+
+	</script>
+	
+	
+</body>
+</html>
