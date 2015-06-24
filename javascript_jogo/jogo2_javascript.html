@@ -1,0 +1,337 @@
+<html>
+<head>
+	<title>Square Game 2.0</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		
+		body{
+			background-color: orange;
+		}
+		
+		thead{
+			text-align: center;
+		}
+		
+		h1{
+			color: blue;
+			text-align: center;
+			font-size: 45px;
+		}
+		
+		#table_game{
+			background-color: white;
+			border: 5px black solid;
+			padding: 5px 5px 5px 5px;
+		}
+		
+		.options{
+			background-color: white;
+			text-align: center;
+			border: 5px black solid;
+			color: black;
+			width: 200px;
+			height: 120px;
+		}
+		
+		#button_restart{
+			border: 5px black solid;
+			width: 200px;
+			height: 35px;
+		}
+	</style>
+</head>
+<body onload="vez()">
+	
+	<table id="main_table"
+		<thead><h1>Square game</h1></thead>
+		<tr>
+			<td rowspan="3" id="td_game">
+				<table id="table_game"></table>
+			</td>
+			<td>
+				<table id="table_turn"></table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="button_restart" type="button" onclick="restart()" value="Restart game">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table id="table_options"></table>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+		var cont1,cont2,tamanho = 8,square_quantity = 0;
+		var tableGame = document.getElementById("table_game");
+		for(cont1=0;cont1<(tamanho*2)-1;cont1++){
+			//console.log("Contador1:"+cont1);
+			var row = tableGame.appendChild(document.createElement("tr"));
+			for(cont2=0;cont2<(tamanho*2)-1;cont2++){
+				//console.log("Contador2:"+cont2);
+				var column = row.appendChild(document.createElement("td"));
+				var img = column.appendChild(document.createElement("img"));
+				var ide = (cont1*((tamanho*2)-1))+cont2;
+				//console.log("ID:"+ide);
+				img.setAttribute("id",ide);
+				if((cont1%2==0)&&(cont2%2==0)){
+					//console.log("Ponto");
+					img.setAttribute("src","d.gif");
+
+				}
+				else if((cont1%2==0)&&(cont2%2==1)){
+					//console.log("Linha Horizontal");
+					img.setAttribute("src","h0.gif");
+					img.setAttribute("onclick","change_to_h1(this)");
+					//img.setAttribute("onmouseover","change_to_h2(this)");
+					//img.setAttribute("onmouseout","change_to_h2(this)");
+					if(ide<(tamanho*2)-1){
+						var array = ["-1",ide+((tamanho*2)-1)];	
+					}
+					else if((ide+((tamanho*2)-1))>(((tamanho*2)-1)*((tamanho*2)-1))) {
+						var array = [ide-((tamanho*2)-1),"-1"];	
+					}
+					else{
+						var array = [ide-((tamanho*2)-1),ide+((tamanho*2)-1)];
+					}
+					//console.log("data_square_id:"+array);
+					img.setAttribute("data-square_id",array);
+				}
+				else if((cont1%2==1)&&(cont2%2==0)){
+					//console.log("Linha Vertical");
+					img.setAttribute("src","v0.gif");
+					img.setAttribute("onclick","change_to_v1(this)");
+					if(ide==((tamanho*2)-1)*cont1){
+						var array = ["-1",ide+1];	
+					}
+					else if(ide==(((tamanho*2)-1)*cont1)+((tamanho*2)-2)) {
+						var array = [ide-1,"-1"];	
+					}
+					else{
+						var array = [ide-1,ide+1];
+					}
+					//console.log("data_square_id:"+array);
+					img.setAttribute("data-square_id",array);
+				}
+				else if((cont1%2==1)&&(cont2%2==1)){
+					//console.log("ID:"+ide);
+					//console.log("Quadrado");
+					img.setAttribute("src","p0.gif");
+					var array2 = [ide-((tamanho*2)-1),ide-1,ide+1,ide+((tamanho*2)-1)];
+					//console.log("data-linhas:"+array2);
+					img.setAttribute("data-linhas",array2);
+					//console.log("data-linhas criado");
+					square_quantity++;
+				}
+			}
+		}
+		var cont3,cont4,pontos_jogador1 = 0,pontos_jogador2 = 0,pontuou = false;
+		var tableOptions = document.getElementById("table_options");
+		tableOptions.setAttribute("class","options");
+		for(cont3=0;cont3<3;cont3++){
+			var linha = tableOptions.appendChild(document.createElement("tr"));
+			for(cont4=0;cont4<2;cont4++){
+				var coluna = linha.appendChild(document.createElement("td"));
+				if((cont3==0)&&(cont4%2==0)){
+					coluna.innerHTML = "Jogador1";
+					coluna.setAttribute("class","label");
+				}
+				else if((cont3==0)&&(cont4%2==1)){
+					coluna.innerHTML = "Jogador2";
+					coluna.setAttribute("class","label");
+				}
+				else if((cont3==1)&&(cont4%2==0)){
+					var imagem = coluna.appendChild(document.createElement("img"));
+					imagem.setAttribute("id","jp1");
+					imagem.setAttribute("src","p1.gif");
+				}
+				else if((cont3==1)&&(cont4%2==1)){
+					var imagem = coluna.appendChild(document.createElement("img"));
+					imagem.setAttribute("id","jp2");
+					imagem.setAttribute("src","p2.gif");
+				}
+				else if((cont3==2)&&(cont4%2==0)){
+					coluna.setAttribute("id","ptsj1");
+					coluna.setAttribute("class","pts");
+					coluna.innerHTML = pontos_jogador1;
+				}
+				else if((cont3==2)&&(cont4%2==1)){
+					coluna.setAttribute("id","ptsj2");
+					coluna.setAttribute("class","pts");
+					coluna.innerHTML = pontos_jogador2;
+				}
+			}
+		}
+		var cont5, tableTurn = document.getElementById("table_turn");
+		tableTurn.setAttribute("class","options");
+		var title = tableTurn.appendChild(document.createElement("thead"));
+		title.innerHTML = "Jogador da Vez";
+		var l1 = tableTurn.appendChild(document.createElement("tr"));
+		var c1 = l1.appendChild(document.createElement("td"));
+		c1.setAttribute("id","turn");
+		c1.setAttribute("color","black");
+		var contador = 1;
+		var jogador1 = document.getElementById("jp1");
+		var jogador2 = document.getElementById("jp2");
+		var player_turn = document.getElementById("turn");
+		
+		function vez(){
+			if(pontuou == false){
+				if(contador%2==1){
+					jogador1.style.border = "5px black solid";
+					jogador2.style.border = "";
+					player_turn.innerHTML = "Jogador 1";
+					player_turn.style.color = "green";
+				}
+				else{
+					jogador1.style.border = "";
+					jogador2.style.border = "5px black solid";
+					player_turn.innerHTML = "Jogador 2";
+					player_turn.style.color = "yellow";
+				}
+				contador++;
+				player_turn.style.fontSize = "35px";
+			}
+			else{
+				pontuou = false;
+			}
+		}
+
+		function change_to_h1(elem){ //mudar linha
+			if(elem.src.indexOf("h1.gif")==-1){
+				elem.src = "h1.gif";
+				var ident = elem.id;
+				console.log("ID:"+ident);
+				var ident_square = elem.getAttribute("data-square_id");
+				console.log("Ident_Square:"+ident_square);
+				var pos = ident_square.indexOf(",");
+				var s1 = ident_square.substring(0,pos);
+				var s2 = ident_square.substring(pos+1,ident_square.length);
+				console.log("s1:"+s1+" "+"s2:"+s2);
+				if(s1 != -1){
+						console.log("s1:"+s1+" diferente de -1");
+						var square = document.getElementById(s1);
+						verif_square(square);
+				}
+				if(s2 != -1){
+						console.log("s2:"+s2+" diferente de -1");
+						var square = document.getElementById(s2);
+						verif_square(square);
+				}
+				vez();
+			}
+		}
+
+		function change_to_v1(elem){ //mudar coluna
+			if(elem.src.indexOf("v1.gif")==-1){
+				elem.src = "v1.gif";
+				var ident = elem.id;
+				console.log("ID:"+ident);
+				var ident_square = elem.getAttribute("data-square_id")
+				console.log("Ident_Square:"+ident_square);
+				var pos = ident_square.indexOf(",");
+				var s1 = ident_square.substring(0,pos);
+				var s2 = ident_square.substring(pos+1,ident_square.length);
+				console.log("s1:"+s1+" "+"s2:"+s2);
+				if(s1 != -1){
+					console.log("s1:"+s1+" diferente de -1");
+					var square = document.getElementById(s1);
+					verif_square(square);
+				}
+				if(s2 != -1){
+					console.log("s2:"+s2+" diferente de -1");
+					var square = document.getElementById(s2);
+					verif_square(square);
+				}
+				vez();
+			}
+		}
+
+		function verif_square(ident){
+			console.log("Verificando quadrado");
+			//console.log("Entrada:"+ident);
+			console.log("Square Data Lines exits:"+ident.hasAttribute("data-linhas"));
+			var square_info = ident.getAttribute('data-linhas');
+			console.log("Square ID:"+ident.id);
+			console.log("Square Data Lines:"+square_info);
+			var p1 = square_info.lastIndexOf(",");
+			var auxiliar = square_info.substring(0,p1);
+			var idl4 = square_info.substring(p1+1,square_info.length);
+			var p2 = auxiliar.lastIndexOf(",");
+			var idl3 = auxiliar.substring(p2+1,auxiliar.length);
+			auxiliar = auxiliar.substring(0,p2);
+			var p3 = auxiliar.lastIndexOf(",");
+			var idl2 = auxiliar.substring(p3+1,auxiliar.length);
+			var idl1 = auxiliar.substring(0,p3);
+			//console.log("idl1:"+idl1);
+			//console.log("idl2:"+idl2);
+			//console.log("idl3:"+idl3);
+			//console.log("idl4:"+idl4);
+			var linha1 = document.getElementById(idl1);
+			var linha2 = document.getElementById(idl2);
+			var linha3 = document.getElementById(idl3);
+			var linha4 = document.getElementById(idl4);
+			console.log("Linha1 ID:"+linha1.id+" "+"linha1.src:"+linha1.src+" "+"posicao:"+linha1.src.indexOf("h1.gif"));
+			console.log("Linha2 ID:"+linha2.id+" "+"linha2.src:"+linha2.src+" "+"posicao:"+linha2.src.indexOf("v1.gif"));
+			console.log("Linha3 ID:"+linha3.id+" "+"linha3.src:"+linha3.src+" "+"posicao:"+linha3.src.indexOf("v1.gif"));
+			console.log("Linha4 ID:"+linha4.id+" "+"linha4.src:"+linha4.src+" "+"posicao:"+linha4.src.indexOf("h1.gif"));
+			if(linha1.src.indexOf("h1.gif") != -1){
+				console.log("Linha1 ok");
+				if(linha2.src.indexOf("v1.gif") != -1){
+					console.log("Linha2 ok");
+					if(linha3.src.indexOf("v1.gif") != -1){
+						console.log("Linha3 ok");
+						if(linha4.src.indexOf("h1.gif") != -1){
+							console.log("Alguem pontuou");
+							square_quantity--;
+							pontuou = true;
+							if(jogador1.style.border!=""){
+								ident.src = jogador1.src;
+								pontos_jogador1++;
+								var show = document.getElementById("ptsj1");
+								show.innerHTML = pontos_jogador1;
+							}
+							else{
+								ident.src = jogador2.src;
+								pontos_jogador2++;
+								var show = document.getElementById("ptsj2");
+								show.innerHTML = pontos_jogador2;
+							}
+						}
+					}
+				}
+			}
+			if(square_quantity==0){
+				var resultado = document.getElementById("td_game");
+				if(pontos_jogador1>pontos_jogador2){
+					resultado.innerHTML = "Jogador 1 Venceu!!!";
+					resultado.style.fontSize = "70px";
+					resultado.style.fontWeight = "bold";
+					resultado.style.color = "green";
+					resultado.border = "5px solid black";
+				}
+				else if(pontos_jogador2>pontos_jogador1){
+					resultado.innerHTML = "Jogador 2 Venceu !!!";
+					resultado.style.fontSize = "70px";
+					resultado.style.fontWeight = "bold";
+					resultado.style.color = "yellow";
+					resultado.border = "5px solid black";
+				}
+				else {
+					resultado.innerHTML = "Jogo empatado !!!";
+					resultado.style.fontSize = "70px";
+					resultado.style.fontWeight = "bold";
+					resultado.border = "5px solid black";
+				}
+				 
+			}
+		}
+
+		function restart (){
+			location.reload(); 
+		}
+	</script>
+</body>
+</html>
